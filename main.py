@@ -18,13 +18,15 @@ while running:
             sys.exit()
     stage += 1
     
-    if (stage < 30):
+    if (stage < 100):
         x_pos += 1
-    elif (stage < 50) : 
-        x_pos += stage // 5
-    elif (stage < 80):
-        x_pos += 25 - (stage // 10)
-    elif (stage < 120) : 
+    elif (stage < 110) : 
+        x_pos += 4
+    elif (stage < 120):
+        x_pos += 7
+    elif (stage < 130):
+        x_pos += 4
+    else : 
         x_pos += 1
     test_surface.fill((175, 215, 75))
     screen.fill(pygame.Color('black'))
