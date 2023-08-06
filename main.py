@@ -8,7 +8,7 @@ clock = pygame.time.Clock()
 x_pos = 100
 stage = 0
 test_surface = pygame.Surface((100, 100))
-
+test_rect = test_surface.get_rect()
 
 while running:
     
@@ -16,8 +16,8 @@ while running:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-    stage += 1
     
+    stage += 1
     if (stage < 100):
         x_pos += 1
     elif (stage < 110) : 
@@ -28,6 +28,7 @@ while running:
         x_pos += 4
     else : 
         x_pos += 1
+    
     test_surface.fill((175, 215, 75))
     screen.fill(pygame.Color('black'))
     screen.blit(test_surface, (x_pos, 150))
