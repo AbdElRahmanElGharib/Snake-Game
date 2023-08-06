@@ -5,7 +5,7 @@ screen = pygame.display.set_mode((800, 500))
 running = True
 clock = pygame.time.Clock()
 
-x_pos = 100
+x_pos = 0
 stage = 0
 test_surface = pygame.Surface((100, 100))
 
@@ -28,6 +28,9 @@ while running:
         x_pos += 4
     else : 
         x_pos += 1
+    elif (x_pos>800) :
+        x_pos = 0
+        stage = 0
     test_surface.fill((175, 215, 75))
     screen.fill(pygame.Color('black'))
     screen.blit(test_surface, (x_pos, 150))
