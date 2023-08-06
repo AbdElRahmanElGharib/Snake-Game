@@ -1,36 +1,35 @@
-import pygame, sys
+import pygame, sys, random
+from pygame.math import Vector2
 
+class FRUIT:
+    def __init__(self):
+        self.x = random.randint(0,cell_number-1)
+        self.y = random.randint(0,cell_number-1)
+        self.pos = Vector2(self.x,self.y)
+
+        
+    def drawFruit(self):
+        fruitRect = pygame.Rect(self.pos.x*cell_size,self.pos.y*cell_size,cell_size,cell_size)
+        pygame.draw.rect(screen,(126,166,114),fruitRect)
+            
 pygame.init()
-screen = pygame.display.set_mode((800, 500))
 running = True
+cell_number = 20
+cell_size = 40
+
+screen = pygame.display.set_mode((cell_number*cell_size,cell_number*cell_size))
 clock = pygame.time.Clock()
 
-x_pos = 0
-stage = 0
-test_surface = pygame.Surface((100, 100))
-
+fruit = FRUIT()
 
 while running:
-    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-    stage += 1
-    
-    if (stage < 30):
-        x_pos += 1
-    elif (stage < 50) : 
-        x_pos += stage // 5
-    elif (stage < 80):
-        x_pos += 25 - (stage // 10)
-    elif (stage < 120) : 
-        x_pos += 1
-    elif (x_pos>800) :
-        x_pos = 0
-        stage = 0
-    test_surface.fill((175, 215, 75))
-    screen.fill(pygame.Color('black'))
-    screen.blit(test_surface, (x_pos, 150))
-    pygame.display.update()   
+    screen.fill((175,215,70))
+    fruit.drawFruit()
+    pygame.display.update()
     clock.tick(60)
+
+
