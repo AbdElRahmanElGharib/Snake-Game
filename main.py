@@ -36,7 +36,7 @@ pygame.init()
 running = True
 cell_number = 20
 cell_size = 40
-velocity = 500
+velocity = 120
 pause_flag = 1
 screen = pygame.display.set_mode((cell_number*cell_size,cell_number*cell_size))
 pygame.display.set_caption("Snake Game")
@@ -49,6 +49,7 @@ pygame.time.set_timer(SCREEN_UPDATE,velocity)
 
 while running:
     for event in pygame.event.get():
+        
         #EXIT GAME
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -67,17 +68,17 @@ while running:
                     pygame.time.set_timer(SCREEN_UPDATE,velocity)
                     pause_flag = 1        
             #direction control
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP and main_game.snake.direction != Vector2(0,1) :
                 main_game.snake.direction=Vector2(0,-1)
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_DOWN and main_game.snake.direction != Vector2(0,-1) :
                 main_game.snake.direction=Vector2(0,1)
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_RIGHT and main_game.snake.direction != Vector2(-1,0) :
                 main_game.snake.direction=Vector2(1,0)
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT and main_game.snake.direction != Vector2(1,0) :
                 main_game.snake.direction=Vector2(-1,0)
     if main_game.snake.body[0] == main_game.fruit.pos:
-        main_game.snake.body.insert(0,main_game.fruit.pos)
-        main_game.fruit.__init__()
+        main_game.snake.body.append(main_game.snake.body[-1])
+        main_game.fruit = FRUIT()
         main_game.fruit.draw_fruit()
                 
     ## GAME OVER (Experimental) 
