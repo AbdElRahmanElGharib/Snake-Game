@@ -15,12 +15,14 @@ class SNAKE:
         self.body=body_copy[:]
 class FRUIT:
     def __init__(self):
-        self.x = random.randint(0,cell_number-1)
-        self.y = random.randint(0,cell_number-1)
-        self.pos = Vector2(self.x,self.y)     
+        self.randomize()   
     def draw_fruit(self):
         fruitRect = pygame.Rect(self.pos.x*cell_size+2,self.pos.y*cell_size+2,cell_size-4,cell_size-4)
-        pygame.draw.ellipse(screen,(255,20,20),fruitRect)           
+        pygame.draw.ellipse(screen,(255,20,20),fruitRect)   
+    def randomize(self):
+        self.x = random.randint(0,cell_number-1)
+        self.y = random.randint(0,cell_number-1)
+        self.pos = Vector2(self.x,self.y) 
 class MAIN:
     def __init__(self):
         self.fruit = FRUIT()
@@ -30,6 +32,11 @@ class MAIN:
         self.snake.draw_snake()
     def update(self):
         self.snake.move_snake()
+    def check_collision(self):
+        if self.snake.body[0] == self.fruit.pos:
+            self.snake.body.append(self.snake.body[-1])
+            self.fruit.randomize()
+        
         
 pygame.init()
 
@@ -76,10 +83,7 @@ while running:
                 main_game.snake.direction=Vector2(1,0)
             if event.key == pygame.K_LEFT and main_game.snake.direction != Vector2(1,0) :
                 main_game.snake.direction=Vector2(-1,0)
-    if main_game.snake.body[0] == main_game.fruit.pos:
-        main_game.snake.body.append(main_game.snake.body[-1])
-        main_game.fruit = FRUIT()
-        main_game.fruit.draw_fruit()
+    main_game.check_collision()
                 
     ## GAME OVER (Experimental) 
     for block in main_game.snake.body:
@@ -92,5 +96,5 @@ while running:
     #         sys.exit()
     screen.fill((175,215,70))
     main_game.draw_elements()
-    pygame.display.update()
+    pygame.display.flip()
     clock.tick(60)
