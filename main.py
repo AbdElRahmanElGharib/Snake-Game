@@ -21,18 +21,28 @@ class FRUIT:
     def draw_fruit(self):
         fruitRect = pygame.Rect(self.pos.x*cell_size+2,self.pos.y*cell_size+2,cell_size-4,cell_size-4)
         pygame.draw.ellipse(screen,(255,20,20),fruitRect)           
-
+class MAIN:
+    def __init__(self):
+        self.fruit = FRUIT()
+        self.snake = SNAKE()
+    def draw_elements(self):
+        self.fruit.draw_fruit()
+        self.snake.draw_snake()
+    def update(self):
+        self.snake.move_snake()
+        
 pygame.init()
+
 running = True
 cell_number = 20
 cell_size = 40
-velocity = 100
+velocity = 500
 pause_flag = 1
 screen = pygame.display.set_mode((cell_number*cell_size,cell_number*cell_size))
 pygame.display.set_caption("Snake Game")
 clock = pygame.time.Clock()
-fruit = FRUIT()
-snake = SNAKE()
+main_game = MAIN()
+
 
 SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE,velocity)
@@ -45,7 +55,7 @@ while running:
             sys.exit()
         #MOVEMENT UPDATE
         if event.type == pygame.USEREVENT:
-            snake.move_snake()
+            main_game.update()
         #CONTROL
         if event.type == pygame.KEYDOWN:
             #pause
@@ -55,27 +65,31 @@ while running:
                     pause_flag = 0
                 elif pause_flag == 0:
                     pygame.time.set_timer(SCREEN_UPDATE,velocity)
-                    pause_flag = 1
-                
+                    pause_flag = 1        
             #direction control
             if event.key == pygame.K_UP:
-                snake.direction=Vector2(0,-1)
+                main_game.snake.direction=Vector2(0,-1)
             if event.key == pygame.K_DOWN:
-                snake.direction=Vector2(0,1)
+                main_game.snake.direction=Vector2(0,1)
             if event.key == pygame.K_RIGHT:
-                snake.direction=Vector2(1,0)
+                main_game.snake.direction=Vector2(1,0)
             if event.key == pygame.K_LEFT:
-                snake.direction=Vector2(-1,0)
-           
+                main_game.snake.direction=Vector2(-1,0)
+    if main_game.snake.body[0] == main_game.fruit.pos:
+        main_game.snake.body.insert(0,main_game.fruit.pos)
+        main_game.fruit.__init__()
+        main_game.fruit.draw_fruit()
+                
     ## GAME OVER (Experimental) 
-    for block in snake.body:
+    for block in main_game.snake.body:
         if block.x > 19 or block.x < 0 or block.y > 19 or block.y < 0 :
              pygame.quit()
              sys.exit()
-    
-    
+    # for block in snake.body[1:]:
+    #     if snake.body[0] == block:
+    #         pygame.quit()
+    #         sys.exit()
     screen.fill((175,215,70))
-    fruit.draw_fruit()
-    snake.draw_snake()
+    main_game.draw_elements()
     pygame.display.update()
     clock.tick(60)
