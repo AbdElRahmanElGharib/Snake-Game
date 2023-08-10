@@ -39,7 +39,6 @@ class MAIN:
         
         
 pygame.init()
-
 running = True
 cell_number = 20
 cell_size = 40
@@ -75,14 +74,15 @@ while running:
                     pygame.time.set_timer(SCREEN_UPDATE,velocity)
                     pause_flag = 1        
             #direction control
-            if event.key == pygame.K_UP and main_game.snake.direction != Vector2(0,1) :
+            if event.key == pygame.K_UP and main_game.snake.direction.y != 1 :
                 main_game.snake.direction=Vector2(0,-1)
-            if event.key == pygame.K_DOWN and main_game.snake.direction != Vector2(0,-1) :
+            if event.key == pygame.K_DOWN and main_game.snake.direction.y != -1 :
                 main_game.snake.direction=Vector2(0,1)
-            if event.key == pygame.K_RIGHT and main_game.snake.direction != Vector2(-1,0) :
+            if event.key == pygame.K_RIGHT and main_game.snake.direction.x != -1 :
                 main_game.snake.direction=Vector2(1,0)
-            if event.key == pygame.K_LEFT and main_game.snake.direction != Vector2(1,0) :
+            if event.key == pygame.K_LEFT and main_game.snake.direction.x != 1 :
                 main_game.snake.direction=Vector2(-1,0)
+    
     main_game.check_collision()
                 
     ## GAME OVER (Experimental) 
@@ -90,10 +90,10 @@ while running:
         if block.x > 19 or block.x < 0 or block.y > 19 or block.y < 0 :
              pygame.quit()
              sys.exit()
-    # for block in snake.body[1:]:
-    #     if snake.body[0] == block:
-    #         pygame.quit()
-    #         sys.exit()
+    for block in main_game.snake.body[1:]:
+        if main_game.snake.body[0] == block:
+            pygame.quit()
+            sys.exit()
     screen.fill((175,215,70))
     main_game.draw_elements()
     pygame.display.flip()
