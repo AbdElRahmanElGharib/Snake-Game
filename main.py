@@ -138,7 +138,13 @@ class MAIN:
         score_x = int(cell_size * cell_number - 60)
         score_y = int(cell_size * cell_number - 40)
         score_rect = score_surface.get_rect(center=(score_x,score_y))
+        apple_rect = self.fruit.apple.get_rect(midright=(score_rect.left, score_rect.centery))
+        bg_rect = pygame.Rect(apple_rect.left,apple_rect.top,apple_rect.width + score_rect.width + 6, apple_rect.height)
+        
+        pygame.draw.rect(screen,(167,209,61),bg_rect)
+        screen.blit(self.fruit.apple, apple_rect)
         screen.blit(score_surface,score_rect)
+        pygame.draw.rect(screen,(56,74,12),bg_rect,2)
         
     def draw_elements(self):
         
@@ -176,7 +182,7 @@ pygame.init()
 running = True
 cell_number = 20
 cell_size = 40
-velocity = 120
+velocity = 800
 pause_flag = 1
 screen = pygame.display.set_mode((cell_number*cell_size,cell_number*cell_size))
 pygame.display.set_caption("Snake Game")
