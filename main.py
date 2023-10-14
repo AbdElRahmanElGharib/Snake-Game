@@ -7,6 +7,7 @@ class SNAKE:
     def __init__(self):
         
         self.body = [Vector2(11,10),Vector2(12,10),Vector2(13,10)]
+        self.body_corner = [False, False, False]
         self.direction = Vector2(-1,0)
         self.direction_last_set = pygame.time.get_ticks()
         
@@ -44,6 +45,7 @@ class SNAKE:
                 elif next_block.y == prev_block.y:
                     screen.blit(self.body_horizontal, block_rect)
                 else:
+                    self.body_corner[index] = True
                     next_block = next_block - block
                     prev_block = block - prev_block
                     if next_block.y == -1:
@@ -68,14 +70,23 @@ class SNAKE:
                             screen.blit(self.body_tr, block_rect)
     
     def head(self):
-        
-        if self.direction == Vector2(-1, 0):
-            return self.head_left
-        if self.direction == Vector2(1, 0):
-            return self.head_right
-        if self.direction == Vector2(0, 1):
-            return self.head_down
-        return self.head_up
+        if self.body_corner[1] == True:
+            if self.direction == Vector2(-1, 0):
+                return self.head_left
+            if self.direction == Vector2(1, 0):
+                return self.head_right
+            if self.direction == Vector2(0, 1):
+                return self.head_down
+            return self.head_up
+        else:
+            direction = self.body[0] - self.body[1]
+            if direction == Vector2(-1, 0):
+                return self.head_left
+            if direction == Vector2(1, 0):
+                return self.head_right
+            if direction == Vector2(0, 1):
+                return self.head_down
+            return self.head_up
             
     
     def tail(self):
@@ -93,8 +104,11 @@ class SNAKE:
     def move_snake(self):
         
         body_copy = self.body[:-1]
+        bcc = self.body_corner[:-1]
         body_copy.insert(0,body_copy[0]+self.direction)
+        bcc.insert(0,False)
         self.body=body_copy[:]
+        self.body_corner = bcc
     
     def set_direction(self, new_direction):
         if (pygame.time.get_ticks() - self.direction_last_set) > 50:
@@ -161,6 +175,7 @@ class MAIN:
         
         if self.snake.body[0] == self.fruit.pos:
             self.snake.body.append(self.snake.body[-1])
+            self.snake.body_corner.append(False)
             self.crunch_sound.play()
             self.fruit.randomize()
         
