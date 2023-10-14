@@ -139,7 +139,7 @@ class MAIN:
     
     def __init__(self):
         
-        pygame.mixer.init()
+        pygame.mixer.pre_init()
         self.fruit = FRUIT()
         self.snake = SNAKE()
         self.crunch_sound = pygame.mixer.Sound('sounds/crunch.wav')
@@ -197,7 +197,7 @@ pygame.init()
 running = True
 cell_number = 20
 cell_size = 40
-velocity = 800
+velocity = 150
 pause_flag = 1
 screen = pygame.display.set_mode((cell_number*cell_size,cell_number*cell_size))
 pygame.display.set_caption("Snake Game")
