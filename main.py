@@ -130,12 +130,22 @@ class MAIN:
         self.snake = SNAKE()
         self.crunch_sound = pygame.mixer.Sound('sounds/crunch.wav')
         self.game_over_sound = pygame.mixer.Sound('sounds/game-over.wav')
+        self.game_font = pygame.font.Font('fonts/BADABB__.TTF',25)
     
+    def draw_score(self):
+        score_text = str(len(self.snake.body)-3)
+        score_surface = self.game_font.render(score_text,True,(56,74,12))
+        score_x = int(cell_size * cell_number - 60)
+        score_y = int(cell_size * cell_number - 40)
+        score_rect = score_surface.get_rect(center=(score_x,score_y))
+        screen.blit(score_surface,score_rect)
+        
     def draw_elements(self):
         
         self.grass_pattern()
         self.fruit.draw_fruit()
         self.snake.draw_snake()
+        self.draw_score()
     
     def update(self):
         
