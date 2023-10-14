@@ -125,9 +125,11 @@ class MAIN:
     
     def __init__(self):
         
+        pygame.mixer.init()
         self.fruit = FRUIT()
         self.snake = SNAKE()
         self.crunch_sound = pygame.mixer.Sound('sounds/crunch.wav')
+        self.game_over_sound = pygame.mixer.Sound('sounds/game-over.wav')
     
     def draw_elements(self):
         
@@ -215,11 +217,17 @@ while running:
     ## GAME OVER
     for block in main_game.snake.body:
         if block.x > 19 or block.x < 0 or block.y > 19 or block.y < 0 :
-             pygame.quit()
-             sys.exit()
+            channel = main_game.game_over_sound.play()
+            while channel.get_busy():
+                pass
+            pygame.quit()
+            sys.exit()
     
     for block in main_game.snake.body[1:]:
         if main_game.snake.body[0] == block:
+            channel = main_game.game_over_sound.play()
+            while channel.get_busy():
+                pass
             pygame.quit()
             sys.exit()
     
