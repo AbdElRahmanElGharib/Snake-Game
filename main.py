@@ -97,7 +97,7 @@ class SNAKE:
         self.body=body_copy[:]
     
     def set_direction(self, new_direction):
-        if (pygame.time.get_ticks() - self.direction_last_set) > 20:
+        if (pygame.time.get_ticks() - self.direction_last_set) > 50:
             self.direction = Vector2(new_direction[:])
             self.direction_last_set = pygame.time.get_ticks()
 
@@ -131,6 +131,7 @@ class MAIN:
     
     def draw_elements(self):
         
+        self.grass_pattern()
         self.fruit.draw_fruit()
         self.snake.draw_snake()
     
@@ -145,7 +146,20 @@ class MAIN:
             self.crunch_sound.play()
             self.fruit.randomize()
         
-        
+    def grass_pattern(self):
+    
+        dark_color = (167, 209, 61)
+        light_color = (187, 229, 81)
+        for current_cell_h in range(cell_number):
+            for current_cell_v in range(cell_number):
+                cell_rect = pygame.Rect(current_cell_h*cell_size, current_cell_v*cell_size, cell_size, cell_size)
+                if ((current_cell_h + current_cell_v) % 2) == 0:
+                    color = light_color
+                else:
+                    color = dark_color
+                pygame.draw.rect(screen, color, cell_rect)
+
+
 pygame.init()
 running = True
 cell_number = 20
