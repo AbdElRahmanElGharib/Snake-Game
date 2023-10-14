@@ -130,6 +130,19 @@ class FRUIT:
            
     def randomize(self):
         
+        cells = []
+        for i in range(cell_number):
+            for j in range(cell_number):
+                cells.append(Vector2(i,j))
+        score_cells = []
+        for i in range(16, cell_number):
+            for j in range(18, cell_number):
+                score_cells.append(Vector2(i,j))
+        for item in score_cells:
+            cells.remove(item)
+        global g_body
+        for item in g_body[:-1]:
+            cells.remove(item)
         self.x = random.randint(0,cell_number-1)
         self.y = random.randint(0,cell_number-1)
         self.pos = Vector2(self.x,self.y) 
@@ -142,6 +155,8 @@ class MAIN:
         pygame.mixer.pre_init()
         self.fruit = FRUIT()
         self.snake = SNAKE()
+        global g_body
+        g_body = self.snake.body
         self.crunch_sound = pygame.mixer.Sound('sounds/crunch.wav')
         self.game_over_sound = pygame.mixer.Sound('sounds/game-over.wav')
         self.game_font = pygame.font.Font('fonts/BADABB__.TTF',25)
@@ -170,6 +185,8 @@ class MAIN:
     def update(self):
         
         self.snake.move_snake()
+        global g_body
+        g_body = self.snake.body
     
     def check_collision(self):
         
@@ -202,7 +219,7 @@ pause_flag = 1
 screen = pygame.display.set_mode((cell_number*cell_size,cell_number*cell_size))
 pygame.display.set_caption("Snake Game")
 clock = pygame.time.Clock()
-
+g_body = []
 main_game = MAIN()
 
 SCREEN_UPDATE = pygame.USEREVENT
