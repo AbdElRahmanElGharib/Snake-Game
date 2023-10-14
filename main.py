@@ -111,7 +111,7 @@ class SNAKE:
         self.body_corner = bcc
     
     def set_direction(self, new_direction):
-        if (pygame.time.get_ticks() - self.direction_last_set) > 50:
+        if (pygame.time.get_ticks() - self.direction_last_set) > velocity:
             self.direction = Vector2(new_direction[:])
             self.direction_last_set = pygame.time.get_ticks()
 
@@ -214,7 +214,7 @@ pygame.init()
 running = True
 cell_number = 20
 cell_size = 40
-velocity = 150
+velocity = 120
 pause_flag = 1
 screen = pygame.display.set_mode((cell_number*cell_size,cell_number*cell_size))
 pygame.display.set_caption("Snake Game")
