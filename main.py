@@ -141,11 +141,10 @@ class FRUIT:
         for item in score_cells:
             cells.remove(item)
         global g_body
-        for item in g_body[:-1]:
-            cells.remove(item)
-        self.x = random.randint(0,cell_number-1)
-        self.y = random.randint(0,cell_number-1)
-        self.pos = Vector2(self.x,self.y) 
+        for item in g_body:
+            if item in cells:
+                cells.remove(item)
+        self.pos = random.choice(cells)
 
 
 class MAIN:
@@ -210,12 +209,13 @@ class MAIN:
                 pygame.draw.rect(screen, color, cell_rect)
 
 
-pygame.init()
+
 running = True
 cell_number = 20
 cell_size = 40
 velocity = 120
 pause_flag = 1
+pygame.init()
 screen = pygame.display.set_mode((cell_number*cell_size,cell_number*cell_size))
 pygame.display.set_caption("Snake Game")
 clock = pygame.time.Clock()
