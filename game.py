@@ -4,8 +4,8 @@ from pygame.math import Vector2
 
 class SNAKE:
     
-    def __init__(self):
-        
+    def __init__(self, screen):
+        self.screen = screen
         self.body = [Vector2(11,10),Vector2(12,10),Vector2(13,10)]
         self.body_corner = [False, False, False]
         self.direction = Vector2(-1,0)
@@ -34,40 +34,40 @@ class SNAKE:
         for index, block in enumerate(self.body):
             block_rect = pygame.Rect(block.x*cell_size,block.y*cell_size,cell_size,cell_size)
             if index == 0:
-                screen.blit(self.head(), block_rect)
+                self.screen.blit(self.head(), block_rect)
             elif index == (len(self.body)-1):
-                screen.blit(self.tail(), block_rect)
+                self.screen.blit(self.tail(), block_rect)
             else:
                 next_block = self.body[index+1]
                 prev_block = self.body[index-1]
                 if next_block.x == prev_block.x:
-                    screen.blit(self.body_vertical, block_rect)
+                    self.screen.blit(self.body_vertical, block_rect)
                 elif next_block.y == prev_block.y:
-                    screen.blit(self.body_horizontal, block_rect)
+                    self.screen.blit(self.body_horizontal, block_rect)
                 else:
                     self.body_corner[index] = True
                     next_block = next_block - block
                     prev_block = block - prev_block
                     if next_block.y == -1:
                         if prev_block.x == -1:
-                            screen.blit(self.body_tr, block_rect)
+                            self.screen.blit(self.body_tr, block_rect)
                         else:
-                            screen.blit(self.body_tl, block_rect)
+                            self.screen.blit(self.body_tl, block_rect)
                     elif next_block.y == 1:
                         if prev_block.x == -1:
-                            screen.blit(self.body_br, block_rect)
+                            self.screen.blit(self.body_br, block_rect)
                         else:
-                            screen.blit(self.body_bl, block_rect)
+                            self.screen.blit(self.body_bl, block_rect)
                     elif next_block.x == -1:
                         if prev_block.y == -1:
-                            screen.blit(self.body_bl, block_rect)
+                            self.screen.blit(self.body_bl, block_rect)
                         else:
-                            screen.blit(self.body_tl, block_rect)
+                            self.screen.blit(self.body_tl, block_rect)
                     else:
                         if prev_block.y == -1:
-                            screen.blit(self.body_br, block_rect)
+                            self.screen.blit(self.body_br, block_rect)
                         else:
-                            screen.blit(self.body_tr, block_rect)
+                            self.screen.blit(self.body_tr, block_rect)
     
     def head(self):
         if self.body_corner[1] == True:
@@ -118,15 +118,15 @@ class SNAKE:
 
 class FRUIT:
     
-    def __init__(self):
-        
+    def __init__(self, screen):
+        self.screen = screen
         self.randomize()   
         self.apple = pygame.image.load('graphics/apple.png').convert_alpha()
     
     def draw_fruit(self):
         
         fruitRect = pygame.Rect(self.pos.x*cell_size+2,self.pos.y*cell_size+2,cell_size-4,cell_size-4)
-        screen.blit(self.apple,fruitRect)
+        self.screen.blit(self.apple,fruitRect)
            
     def randomize(self):
         
@@ -149,11 +149,11 @@ class FRUIT:
 
 class MAIN:
     
-    def __init__(self):
-        
+    def __init__(self, screen):
+        self.screen = screen
         pygame.mixer.pre_init()
-        self.fruit = FRUIT()
-        self.snake = SNAKE()
+        self.fruit = FRUIT(self.screen)
+        self.snake = SNAKE(self.screen)
         global g_body
         g_body = self.snake.body
         self.crunch_sound = pygame.mixer.Sound('sounds/crunch.wav')
@@ -169,10 +169,10 @@ class MAIN:
         apple_rect = self.fruit.apple.get_rect(midright=(score_rect.left, score_rect.centery))
         bg_rect = pygame.Rect(apple_rect.left,apple_rect.top,apple_rect.width + score_rect.width + 6, apple_rect.height)
         
-        pygame.draw.rect(screen,(167,209,61),bg_rect)
-        screen.blit(self.fruit.apple, apple_rect)
-        screen.blit(score_surface,score_rect)
-        pygame.draw.rect(screen,(56,74,12),bg_rect,2)
+        pygame.draw.rect(self.screen,(167,209,61),bg_rect)
+        self.screen.blit(self.fruit.apple, apple_rect)
+        self.screen.blit(score_surface,score_rect)
+        pygame.draw.rect(self.screen,(56,74,12),bg_rect,2)
         
     def draw_elements(self):
         
@@ -206,21 +206,21 @@ class MAIN:
                     color = light_color
                 else:
                     color = dark_color
-                pygame.draw.rect(screen, color, cell_rect)
+                pygame.draw.rect(self.screen, color, cell_rect)
 
+cell_number = 20
+cell_size = 40
+velocity = 120
+g_body = []
 
 def run_game():
     running = True
-    cell_number = 20
-    cell_size = 40
-    velocity = 120
     pause_flag = 1
     pygame.init()
     screen = pygame.display.set_mode((cell_number*cell_size,cell_number*cell_size))
     pygame.display.set_caption("Snake Game")
     clock = pygame.time.Clock()
-    g_body = []
-    main_game = MAIN()
+    main_game = MAIN(screen)
 
     SCREEN_UPDATE = pygame.USEREVENT
     pygame.time.set_timer(SCREEN_UPDATE,velocity)
