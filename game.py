@@ -126,6 +126,7 @@ class Game:
         
         def __init__(self, screen):
             self.screen = screen
+            self.pos = Vector2(1,1)
             self.randomize()   
             self.apple = pygame.image.load('graphics/apple.png').convert_alpha()
         
