@@ -118,7 +118,7 @@ class Game:
             self.body_corner = bcc
         
         def set_direction(self, new_direction):
-            if (pygame.time.get_ticks() - self.direction_last_set) > Game.velocity:
+            if (pygame.time.get_ticks() - self.direction_last_set) > Game.velocity/2:
                 self.direction = Vector2(new_direction[:])
                 self.direction_last_set = pygame.time.get_ticks()
 
@@ -216,7 +216,7 @@ class Game:
         screen = pygame.display.set_mode((self.cell_number*self.cell_size,self.cell_number*self.cell_size))
         pygame.display.set_caption("Snake Game")
         clock = pygame.time.Clock()
-        main_game = self.MAIN(screen)
+        self.main_game = Game.MAIN(screen)
         SCREEN_UPDATE = pygame.USEREVENT
         pygame.time.set_timer(SCREEN_UPDATE,self.velocity)
 
@@ -231,7 +231,7 @@ class Game:
                 
                 #MOVEMENT UPDATE
                 if event.type == pygame.USEREVENT:
-                    main_game.update()
+                    self.main_game.update()
                 
                 #CONTROL
                 if event.type == pygame.KEYDOWN:
@@ -246,36 +246,36 @@ class Game:
                             pause_flag = 1        
                     
                     #direction control
-                    if event.key == pygame.K_UP and main_game.snake.direction.y != 1 :
-                        main_game.snake.set_direction((0,-1))
-                    if event.key == pygame.K_DOWN and main_game.snake.direction.y != -1 :
-                        main_game.snake.set_direction((0,1))
-                    if event.key == pygame.K_RIGHT and main_game.snake.direction.x != -1 :
-                        main_game.snake.set_direction((1,0))
-                    if event.key == pygame.K_LEFT and main_game.snake.direction.x != 1 :
-                        main_game.snake.set_direction((-1,0))
+                    if event.key == pygame.K_UP and self.main_game.snake.direction.y != 1 :
+                        self.main_game.snake.set_direction((0,-1))
+                    if event.key == pygame.K_DOWN and self.main_game.snake.direction.y != -1 :
+                        self.main_game.snake.set_direction((0,1))
+                    if event.key == pygame.K_RIGHT and self.main_game.snake.direction.x != -1 :
+                        self.main_game.snake.set_direction((1,0))
+                    if event.key == pygame.K_LEFT and self.main_game.snake.direction.x != 1 :
+                        self.main_game.snake.set_direction((-1,0))
             
-            main_game.check_collision()
+            self.main_game.check_collision()
                         
             ## GAME OVER
-            for block in main_game.snake.body:
+            for block in self.main_game.snake.body:
                 if block.x > 19 or block.x < 0 or block.y > 19 or block.y < 0 :
-                    channel = main_game.game_over_sound.play()
+                    channel = self.main_game.game_over_sound.play()
                     while channel.get_busy():
                         pass
                     pygame.quit()
                     sys.exit()
             
-            for block in main_game.snake.body[1:]:
-                if main_game.snake.body[0] == block:
-                    channel = main_game.game_over_sound.play()
+            for block in self.main_game.snake.body[1:]:
+                if self.main_game.snake.body[0] == block:
+                    channel = self.main_game.game_over_sound.play()
                     while channel.get_busy():
                         pass
                     pygame.quit()
                     sys.exit()
             
             screen.fill((175,215,70))
-            main_game.draw_elements()
+            self.main_game.draw_elements()
             pygame.display.flip()
             clock.tick(60)
 
